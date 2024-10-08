@@ -68,12 +68,14 @@ export const formatGraphqlJson = (data: MediaData) => {
   const width = data.dimensions.width.toString();
   const height = data.dimensions.height.toString();
   const videoUrl = data.video_url;
+  const caption = data.edge_media_to_caption.edges[0].node.text;
 
   const videoJson: VideoInfo = {
     filename,
     width,
     height,
     videoUrl,
+    caption,
   };
 
   return videoJson;

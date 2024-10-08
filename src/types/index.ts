@@ -17,6 +17,7 @@ export type VideoInfo = {
   width: string;
   height: string;
   videoUrl: string;
+  caption?: string;
 };
 
 export type SuccessResponse<T> = {
