@@ -12,6 +12,15 @@ export type SiteConfig = {
 export type Unit = "ms" | "s" | "m" | "h" | "d";
 export type Duration = `${number} ${Unit}` | `${number}${Unit}`;
 
+export type RecipeInfo = {
+  name: string;
+  ingredients: {
+    name: string;
+    amount: string;
+  }[];
+  steps: string[];
+};
+
 export type VideoInfo = {
   filename: string;
   width: string;
