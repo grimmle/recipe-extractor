@@ -19,6 +19,7 @@ export type RecipeInfo = {
     amount: string;
   }[];
   steps: string[];
+  url: string;
 };
 
 export type VideoInfo = {

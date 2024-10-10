@@ -22,13 +22,15 @@ function handleError(error: any) {
   }
 }
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   if (!INSTAGRAM_CONFIGS.enableServerAPI) {
     const notImplementedResponse = makeErrorResponse("Not Implemented");
     return NextResponse.json(notImplementedResponse, { status: 501 });
   }
 
-  const postUrl = new URL(request.url).searchParams.get("postUrl");
+  const postData = await request.json();
+  const postUrl = postData.postUrl;
+  // const postUrl = new URL(request.url).searchParams.get("postUrl");
   if (!postUrl) {
     const badRequestResponse = makeErrorResponse("Post URL is required");
     return NextResponse.json(badRequestResponse, { status: 400 });
@@ -41,8 +43,8 @@ export async function GET(request: Request) {
   }
 
   try {
-    const postJson = await getVideoInfo(postId);
-    const recipeText = postJson.caption;
+    const postInfo = await getVideoInfo(postId);
+    const recipeText = postInfo.caption;
     if (!recipeText) {
       const badRequestResponse = makeErrorResponse("No caption found.");
       return NextResponse.json(badRequestResponse, { status: 400 });
@@ -56,11 +58,17 @@ export async function GET(request: Request) {
             z.object({ name: z.string(), amount: z.string() })
           ),
           steps: z.array(z.string()),
+          url: z.string(),
         }),
       }),
-      prompt: `You are my personal chef. What are the ingredients (with measurements) and steps for the following recipe? Convert all measurements to the metric systems if not already the case. Recipe: "${recipeText}"`,
+      prompt: `You are my personal assistant and help me transribe recipes for my cookbook. 
+                What are the ingredients (with measurements) and steps for the following recipe? 
+                Convert all measurements to the metric systems if not already the case. 
+                Capitalize the first word for every item in a list. Do not add any info by yourself! 
+                Only output ingredients and steps that are stated in the original recipe. Recipe: "${recipeText}"`,
     });
     console.log(object);
+    object.recipe.url = postUrl;
     const response = makeSuccessResponse<RecipeInfo>(object.recipe);
     return NextResponse.json(response, { status: 200 });
   } catch (error: any) {

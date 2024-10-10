@@ -40,8 +40,8 @@ export async function POST(request: Request) {
       prompt: `You are my personal chef. What are the ingredients (with measurements) and steps for the following recipe? Convert all measurements to the metric systems if not already the case. Recipe: "${recipeText}"`,
     });
     console.log(object);
-    const response = makeSuccessResponse<RecipeInfo>(object.recipe);
-    return NextResponse.json(response, { status: 200 });
+    // const response = makeSuccessResponse<RecipeInfo>(object.recipe);
+    // return NextResponse.json(response, { status: 200 });
   } catch (error: any) {
     return handleError(error);
   }
