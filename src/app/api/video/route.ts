@@ -45,6 +45,8 @@ export async function POST(request: Request) {
 
   try {
     const postInfo = await getVideoInfo(postId);
+    // TODO: do video2text transform to extract valuable data if no caption is provided
+
     const recipeText = postInfo.caption;
     if (!recipeText) {
       const badRequestResponse = makeErrorResponse("No caption found.");
@@ -64,13 +66,14 @@ export async function POST(request: Request) {
                 What are the ingredients (with measurements) and steps for the following recipe?
                 Always convert all measurements to the metric systems if that is not already the case!
                 The steps should be separated into parts of the recipe (e.g. "Cream cheese frosting" or "Sauce")
-                if a part consists of at least two instructions. If a step should always mention the necessary
+                if a part consists of at least two instructions. A step should always mention the necessary
                 ingredients with measurements to fulfill it, e.g. a step like "Mix all ingredients for the batter"
                 should instead be "Mix 200g of flour, 100ml of milk and 3 eggs". The ingredients and steps should be
-                returned as a single string of valid HTML. Ingredients are listed in an unordered list <ul>, each item added as an <li> element.
-                Headings in the steps are <h4> elements and steps below them are listed in a ordered list <ol>.
-                Do not add any info by yourself!
-                Only output ingredients and steps that are stated in the original recipe. Recipe: "${recipeText}"`,
+                returned as a single string of valid HTML. Ingredients are listed in an unordered list <ul>, 
+                each item added as an <li> element. Headings in the steps are <h4> elements and steps below them 
+                are listed in a ordered list <ol>. Do not add any info by yourself! Only output ingredients and steps 
+                that are stated in the original recipe. 
+                Recipe: "${recipeText}"`,
     });
     object.recipe.url = postUrl;
     const client = buildClient({
