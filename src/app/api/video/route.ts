@@ -30,7 +30,6 @@ export async function POST(request: Request) {
 
   const postData = await request.json();
   const postUrl = postData.postUrl;
-  // const postUrl = new URL(request.url).searchParams.get("postUrl");
   if (!postUrl) {
     const badRequestResponse = makeErrorResponse("Post URL is required");
     return NextResponse.json(badRequestResponse, { status: 400 });
@@ -54,20 +53,25 @@ export async function POST(request: Request) {
       schema: z.object({
         recipe: z.object({
           name: z.string(),
-          ingredients: z.array(
-            z.object({ name: z.string(), amount: z.string() })
+          ingredients: z.array(z.string()),
+          steps: z.array(
+            z.object({
+              title: z.string(),
+              instructions: z.array(z.string()),
+            })
           ),
-          steps: z.array(z.string()),
-          url: z.string(),
+          url: z.optional(z.string()),
         }),
       }),
       prompt: `You are my personal assistant and help me transribe recipes for my cookbook. 
                 What are the ingredients (with measurements) and steps for the following recipe? 
-                Convert all measurements to the metric systems if not already the case. 
-                Capitalize the first word for every item in a list. Do not add any info by yourself! 
+                Always convert all measurements to the metric systems if that is not already the case.
+                The steps should be separated into parts of the recipe (e.g. "Cream cheese frosting" or "Sauce") 
+                if a part consists of at least two instructions. If a step should always mention the necessary 
+                ingredients with measurements to fulfill it, e.g. a step like "Mix all ingredients for the batter" 
+                should instead be "Mix 200g of flour, 100ml of milk and 3 eggs". Do not add any info by yourself! 
                 Only output ingredients and steps that are stated in the original recipe. Recipe: "${recipeText}"`,
     });
-    console.log(object);
     object.recipe.url = postUrl;
     const response = makeSuccessResponse<RecipeInfo>(object.recipe);
     return NextResponse.json(response, { status: 200 });
