@@ -14,11 +14,8 @@ export type Duration = `${number} ${Unit}` | `${number}${Unit}`;
 
 export type RecipeInfo = {
   name: string;
-  ingredients: string[];
-  steps: {
-    title: string;
-    instructions: string[];
-  }[];
+  ingredients?: any;
+  steps?: any;
   url?: string;
 };
 
