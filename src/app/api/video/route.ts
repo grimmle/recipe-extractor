@@ -30,13 +30,13 @@ export async function GET(request: Request) {
     return NextResponse.json(notImplementedResponse, { status: 501 });
   }
 
-  const postUrl = new URL(request.url).searchParams.get("postUrl");
-
-  if (!postUrl) {
+  const urlFromQueryParam = new URL(request.url).searchParams.get("postUrl");
+  if (!urlFromQueryParam) {
     const badRequestResponse = makeErrorResponse("Post URL is required");
     return NextResponse.json(badRequestResponse, { status: 400 });
   }
 
+  const postUrl = decodeURIComponent(urlFromQueryParam);
   const postId = getPostIdFromUrl(postUrl);
   if (!postId) {
     const noPostIdResponse = makeErrorResponse("Invalid Post URL");
