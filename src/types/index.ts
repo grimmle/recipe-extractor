@@ -22,6 +22,13 @@ export type RecipeInfo = {
   url?: string;
 };
 
+export type RecipeInfoDatoCMS = {
+  title: { en: string };
+  ingredients: { en: string };
+  todo: { en: string };
+  inspiredBy?: { en: string };
+};
+
 export type VideoInfo = {
   filename: string;
   width: string;

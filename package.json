@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.66",
+    "@datocms/cma-client-node": "^3.3.12",
     "@hookform/resolvers": "^3.3.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
