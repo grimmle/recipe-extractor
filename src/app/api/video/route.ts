@@ -68,11 +68,14 @@ export async function GET(request: Request) {
                 The steps should be separated into parts of the recipe (e.g. "Cream cheese frosting" or "Sauce")
                 if a part consists of at least two instructions. A step should always mention the necessary
                 ingredients with measurements to fulfill it, e.g. a step like "Mix all ingredients for the batter"
-                should instead be "Mix 200g of flour, 100ml of milk and 3 eggs". The ingredients and steps should be
-                returned as a single string of valid HTML. Ingredients are listed in an unordered list <ul>, 
-                each item added as an <li> element. Headings in the steps are <h4> elements and steps below them 
-                are listed in a ordered list <ol>. Do not add any info by yourself! Only output ingredients and steps 
-                that are stated in the original recipe. 
+                should instead be "Mix 200g of flour, 100ml of milk and 3 eggs". Any ingredient in a step should be
+                formatted in bold using the <strong> tag. The ingredients and steps should be returned as a single 
+                string of valid HTML. Ingredients are listed in an unordered list <ul>, each item added as an <li> element
+                and in the following structure: e.g. '200g Potatoes' with the measurement after the ingredient and 
+                no space between the number and any metric unit. Headings in the steps are <h4> elements and steps 
+                below them are listed in a ordered list <ol>. 
+
+                Do not add any info by yourself! Only output ingredients and steps that are stated in the original recipe. 
                 Recipe: "${recipeText}"`,
     });
     object.recipe.url = postUrl;
@@ -80,6 +83,7 @@ export async function GET(request: Request) {
       apiToken: process.env.DATOCMS_API_TOKEN ?? "",
     });
     const record = await client.items.create({
+      inspired_by: postUrl,
       title: { en: object.recipe.name },
       slug: {
         en: object.recipe.name
