@@ -108,7 +108,6 @@ export function getHttpErrorMessage(error: any): string | null {
 }
 
 export const makeSuccessResponse = <T extends any>(data: T) => {
-  console.log(data);
   const response: SuccessResponse<T> = {
     status: "success",
     data: data,

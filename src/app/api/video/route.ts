@@ -13,6 +13,15 @@ import { buildClient } from "@datocms/cma-client-node";
 import { parse5ToStructuredText } from "datocms-html-to-structured-text";
 import { parse } from "parse5";
 
+function formatTodaysDate() {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+
+  return `${year}-${month}-${day}`;
+}
+
 function handleError(error: any) {
   if (error instanceof HTTPError) {
     const response = makeErrorResponse(error.message);
@@ -80,9 +89,10 @@ export async function GET(request: Request) {
     });
     object.recipe.url = postUrl;
     const client = buildClient({
-      apiToken: process.env.DATOCMS_API_TOKEN ?? "",
+      apiToken: process.env.DATOCMS_API_TOKEN ?? null,
     });
     const record = await client.items.create({
+      date: formatTodaysDate(),
       inspired_by: postUrl,
       title: { en: object.recipe.name },
       slug: {
@@ -111,7 +121,8 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ success: true, data: record }, { status: 200 });
+    const response = makeSuccessResponse(record);
+    return NextResponse.json(response);
   } catch (error: any) {
     return handleError(error);
   }
