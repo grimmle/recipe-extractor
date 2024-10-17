@@ -12,6 +12,7 @@ import { z } from "zod";
 import { buildClient } from "@datocms/cma-client-node";
 import { parse5ToStructuredText } from "datocms-html-to-structured-text";
 import { parse } from "parse5";
+import sendEmailNotification from "@/lib/mailer";
 
 function formatTodaysDate() {
   const now = new Date();
@@ -120,6 +121,8 @@ export async function GET(request: Request) {
         id: "YcJscRUJQKeioYp5KnB8Pg",
       },
     });
+
+    sendEmailNotification(object.recipe.name);
 
     const response = makeSuccessResponse(record);
     return NextResponse.json(response);

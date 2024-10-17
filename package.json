@@ -30,6 +30,7 @@
     "lucide-react": "^0.366.0",
     "next": "^14.0.3",
     "next-themes": "^0.3.0",
+    "nodemailer": "^6.9.15",
     "parse5": "^7.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.28.11",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.16",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.16",
