@@ -12,10 +12,16 @@ export const getIGVideoFileName = () =>
 export const getPostIdFromUrl = (postUrl: string) => {
   const postRegex =
     /^https:\/\/(?:www\.)?instagram\.com\/p\/([a-zA-Z0-9_-]+)\/?/;
-  const reelRegex =
+  const reelsRegex =
     /^https:\/\/(?:www\.)?instagram\.com\/reels?\/([a-zA-Z0-9_-]+)\/?/;
+  const reelRegex =
+    /^https:\/\/(?:www\.)?instagram\.com\/reel\/([a-zA-Z0-9_-]+)\/?/;
 
-  return postUrl.match(postRegex)?.at(-1) || postUrl.match(reelRegex)?.at(-1);
+  return (
+    postUrl.match(postRegex)?.at(-1) ||
+    postUrl.match(reelsRegex)?.at(-1) ||
+    postUrl.match(reelRegex)?.at(-1)
+  );
 };
 
 export const encodeGraphqlRequestData = (shortcode: string) => {
