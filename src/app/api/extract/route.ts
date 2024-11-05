@@ -75,6 +75,8 @@ export async function GET(request: Request) {
       prompt: `You are my personal assistant and help me transribe recipes for my cookbook.
                 What are the ingredients (with measurements) and steps for the following recipe?
                 Always convert all measurements to the metric systems if that is not already the case!
+                Translate everything to english.
+                
                 The steps should be separated into parts of the recipe (e.g. "Cream cheese frosting" or "Sauce")
                 if a part consists of at least two instructions. A step should always mention the necessary
                 ingredients with measurements to fulfill it, e.g. a step like "Mix all ingredients for the batter"
