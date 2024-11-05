@@ -54,6 +54,7 @@ export async function GET(request: Request) {
   }
 
   try {
+    console.log("get video info");
     const postInfo = await getVideoInfo(postId);
     // TODO: do video2text transform to extract valuable data if no caption is provided
 
@@ -62,6 +63,7 @@ export async function GET(request: Request) {
       const badRequestResponse = makeErrorResponse("No caption found.");
       return NextResponse.json(badRequestResponse, { status: 400 });
     }
+    console.log("generate object with OpenAI");
     const { object } = await generateObject({
       model: openai("gpt-4o-mini"),
       schema: z.object({
@@ -94,6 +96,7 @@ export async function GET(request: Request) {
     const client = buildClient({
       apiToken: process.env.DATOCMS_API_TOKEN ?? null,
     });
+    console.log("create object for DatoCMS");
     const record = await client.items.create({
       date: formatTodaysDate(),
       inspired_by: postUrl,
@@ -124,6 +127,7 @@ export async function GET(request: Request) {
       },
     });
 
+    console.log("send mail");
     sendEmailNotification(object.recipe.name);
 
     const response = makeSuccessResponse(record);
