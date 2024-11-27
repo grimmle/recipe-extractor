@@ -77,14 +77,15 @@ export async function GET(request: Request) {
       prompt: `You are my personal assistant and help me transribe recipes for my cookbook.
                 What are the ingredients (with measurements) and steps for the following recipe?
                 Always convert all measurements to the metric systems if that is not already the case!
-                Translate everything to english.
+                Translate everything to german. Use impersonal language.
                 
                 The steps should be separated into parts of the recipe (e.g. "Cream cheese frosting" or "Sauce")
                 if a part consists of at least two instructions. A step should always mention the necessary
                 ingredients with measurements to fulfill it, e.g. a step like "Mix all ingredients for the batter"
-                should instead be "Mix 200g of flour, 100ml of milk and 3 eggs". Any ingredient in a step should be
-                formatted in bold using the <strong> tag. The ingredients and steps should be returned as a single 
-                string of valid HTML. Ingredients are listed in an unordered list <ul>, each item added as an <li> element
+                should instead be "Mix 200g of flour, 100ml of milk and 3 eggs".
+                Any ingredient with its measurement in a step should be formatted in bold using the <strong> tag. 
+                The ingredients and steps should be returned as a single string of valid HTML. 
+                Ingredients are listed in an unordered list <ul>, each item added as an <li> element
                 and in the following structure: e.g. '200g Potatoes' with the measurement after the ingredient and 
                 no space between the number and any metric unit. Headings in the steps are <h4> elements and steps 
                 below them are listed in a ordered list <ol>. 
@@ -100,22 +101,24 @@ export async function GET(request: Request) {
     const record = await client.items.create({
       date: formatTodaysDate(),
       inspired_by: postUrl,
-      title: { en: object.recipe.name },
+      title: {
+        de: object.recipe.name,
+      },
       slug: {
-        en: object.recipe.name
+        de: object.recipe.name
           .replace(/[^\w\s]/gi, " ")
           .replace(/\s+/g, "-")
           .toLowerCase(),
       },
       ingredients: {
-        en: await parse5ToStructuredText(
+        de: await parse5ToStructuredText(
           parse(object.recipe.ingredients, {
             sourceCodeLocationInfo: true,
           })
         ),
       },
       todo: {
-        en: await parse5ToStructuredText(
+        de: await parse5ToStructuredText(
           parse(object.recipe.steps, {
             sourceCodeLocationInfo: true,
           })
